@@ -1,30 +1,14 @@
 from dateUts import *
-from datetime import datetime as dt
+from datetime import datetime
 
 
-def Tratar_Inserir(cursor_con,empresas,datas,relevantes,modalidades):
-    for e, d, r, m in list(zip(empresas,datas,relevantes,modalidades)):
-    
-        d = d.text
-        d = str(d)
-        d = d.split()
-        d.remove(d[1])
-        for vlr in d:
-            data = dt.strptime(vlr,'%d/%m/%Y')
-            vlr = vlr.replace("/","-")
-            vlr = vlr.split("-")
-
-        r = r.text
-        r = str(r)        
-
-
-        m = m.text
-        m = str(m)
-                    
-
-        e = e.text
-        e = str(e)
-
-        sql = f'''INSERT INTO cvm (empresa,data,fato_rel,modalidade) VALUES ('{e}',{dateToSql(data)},'{r}','{m}')'''
-        cursor = cursor_con[0]
-        cursor.execute(sql)
+def Tratar_Inserir(cursor,empresas,datas,relevantes,modalidades):
+    for empresa, data, relevante, modalidade in zip(empresas, datas, relevantes, modalidades):
+        data_str = data.text.split()[0]
+        data_obj = datetime.strptime(data_str, '%d/%m/%Y')
+        data_sql = data_obj.strftime('%Y-%m-%d')
+        relevante_str = relevante.text
+        modalidade_str = modalidade.text
+        empresa_str = empresa.text
+        sql = 'INSERT INTO cvm (empresa, data, fato_rel, modalidade) VALUES (%s, %s, %s, %s)'
+        cursor.execute(sql, (empresa_str, data_sql, relevante_str, modalidade_str))

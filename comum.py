@@ -23,4 +23,4 @@ def Psycopg():
 
     cursor = conn.cursor()
 
-    return (cursor, conn)
+    return cursor

@@ -1,8 +1,5 @@
 
-def Criacao_DB(cursor_con):
-    cursor = cursor_con[0]
-    sql = 'DROP TABLE IF EXISTS cvm'
-    cursor.execute(sql)
+def Criacao_DB(cursor):
 
     sql = f'''CREATE TABLE cvm(
     id SERIAL NOT NULL,
